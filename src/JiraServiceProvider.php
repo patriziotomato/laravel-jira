@@ -12,8 +12,8 @@ class JiraServiceProvider extends ServiceProvider
             __DIR__ . '/../config/jira.php' => config_path( 'jira.php' ),
         ] );
 
-        $this->app->singleton(JiraService::class, function ($app) {
-            return new JiraService(...config('jira'));
+        $this->app->singleton(Jira::class, function ($app) {
+            return new Jira(...array_values(config('jira')));
         });
     }
 

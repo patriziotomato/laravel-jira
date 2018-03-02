@@ -3,9 +3,11 @@
 namespace LaravelJira;
 
 
-class JiraService
+class Jira
 {
-    public $url;
+    use Services\Project;
+
+    private $url;
     private $username;
     private $password;
 

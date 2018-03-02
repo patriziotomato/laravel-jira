@@ -13,7 +13,7 @@ trait Project
      * @param $projectName
      * @return Versions
      */
-    public function projectVersions($projectName, $released = null)
+    public function projectVersions($projectName)
     {
         $proj = new ProjectService();
 

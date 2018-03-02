@@ -3,6 +3,7 @@
 namespace LaravelJira\Responses;
 
 
+use Carbon\Carbon;
 use Illuminate\Support\Collection;
 use JiraRestApi\Issue\Version;
 
@@ -31,6 +32,23 @@ class Versions
     public function get()
     {
         return $this->filteredVersions;
+    }
+
+    public function orderByReleaseDate()
+    {
+        $this->filteredVersions = $this->filteredVersions->sort(function(Version $versionA, Version $versionB) {
+            if (!$versionA->releaseDate) {
+                return 1;
+            }
+
+            if (!$versionB->releaseDate) {
+                return -1;
+            }
+
+            return Carbon::instance($versionA->releaseDate)->gt(Carbon::instance($versionB->releaseDate)) ? 1 : -1;
+        })->values();
+
+        return $this;
     }
 
     public function released()

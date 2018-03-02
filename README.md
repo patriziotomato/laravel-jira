@@ -1,2 +1,2 @@
 # laravel-jira
-Wraps the Jira-API in your Laravel Application
+Easily access the Jira-API in your Laravel Application

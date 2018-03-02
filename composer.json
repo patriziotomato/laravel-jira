@@ -1,0 +1,32 @@
+{
+    "name": "patriziotomato/laravel-jira",
+    "description": "Easily access the Jira-API in your Laravel Application",
+    "keywords": ["framework", "laravel"],
+    "license": "MIT",
+    "type": "project",
+    "require": {
+        "php": ">=7.1.3",
+        "laravel/framework": "5.6.*",
+        "lesstif/php-jira-rest-client": "^1.19"
+    },
+    "autoload": {
+        "psr-4": {
+            "LaraJira\\": "./src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Tests\\": "tests/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "LaravelJira\\JiraServiceProvider"
+            ],
+            "aliases": {
+                "Jira": "LaravelJira\\JiraFacade"
+            }
+        }
+    }
+}

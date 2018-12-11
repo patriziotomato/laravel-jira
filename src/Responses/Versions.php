@@ -45,7 +45,10 @@ class Versions
                 return -1;
             }
 
-            return Carbon::instance($versionA->releaseDate)->gt(Carbon::instance($versionB->releaseDate)) ? 1 : -1;
+            $dateA = new Carbon($versionA->releaseDate);
+            $dateB = new Carbon($versionB->releaseDate);
+
+            return $dateA->gt($dateB) ? 1 : -1;
         })->values();
 
         return $this;

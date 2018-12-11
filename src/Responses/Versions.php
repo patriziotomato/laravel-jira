@@ -5,6 +5,7 @@ namespace LaravelJira\Responses;
 
 use Carbon\Carbon;
 use Illuminate\Support\Collection;
+use JiraRestApi\Issue\IssueService;
 use JiraRestApi\Issue\Version;
 
 /**
@@ -36,7 +37,7 @@ class Versions
 
     public function orderByReleaseDate()
     {
-        $this->filteredVersions = $this->filteredVersions->sort(function(Version $versionA, Version $versionB) {
+        $this->filteredVersions = $this->filteredVersions->sort(function (Version $versionA, Version $versionB) {
             if (!$versionA->releaseDate) {
                 return 1;
             }
@@ -92,6 +93,32 @@ class Versions
     public function notOverdue()
     {
         $this->filterVersions(null, false, false);
+
+        return $this;
+    }
+
+    public function withTicketInformation()
+    {
+        $issueService = new IssueService();
+
+        $this->filteredVersions->transform(function ($version) use ($issueService) {
+            $searchResult = $issueService->search(
+                'resolution = Unresolved AND fixVersion = ' . $version->id
+            );
+
+            $version->remainingOpenIssues = $searchResult->total ?? 0;
+            $version->remainingEffortInHours = 0;
+
+            foreach ($searchResult->getIssues() as $issue) {
+                $hours = 0;
+                if ($issue->fields->aggregatetimeoriginalestimate) {
+                    $hours = $issue->fields->aggregatetimeoriginalestimate / 60 / 60;
+                }
+                $version->remainingEffortInHours = round($version->remainingEffortInHours + $hours, 1);
+            }
+
+            return $version;
+        });
 
         return $this;
     }

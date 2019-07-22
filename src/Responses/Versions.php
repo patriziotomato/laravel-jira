@@ -151,10 +151,6 @@ class Versions
                     $version->remainingEffortInHours = round($version->remainingEffortInHours + $hoursLeft, 4);
                 }
 
-                if ($issue->fields->assignee) {
-                    dd($issue->fields->assignee);
-                }
-
                 $version->issues[$issue->key] = [
                     'key'                                 => $issue->key,
                     'reporter'                            => $issue->fields->reporter ? [

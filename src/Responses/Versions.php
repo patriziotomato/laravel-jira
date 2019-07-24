@@ -105,8 +105,6 @@ class Versions
         $issueService = new IssueService();
 
         $this->filteredVersions->transform(function ($version) use ($issueService, $verbosityLevel) {
-            $searchResult = $issueService->search('fixVersion = '.$version->id, 0, 500);
-
             if ($verbosityLevel >= OutputInterface::VERBOSITY_VERY_VERBOSE) {
                 if ($version->archived) {
                     Log::debug("- Skipping ticket informations for milestone {$version->name} #$version->id");
@@ -116,6 +114,8 @@ class Versions
 
                 Log::debug("- Updating milestone {$version->name} #$version->id");
             }
+
+            $searchResult = $issueService->search('fixVersion = '.$version->id, 0, 500);
 
             //dd($searchResult);
 
@@ -151,6 +151,10 @@ class Versions
                     $version->remainingEffortInHours = round($version->remainingEffortInHours + $hoursLeft, 4);
                 }
 
+                //if ($issue->fields->assignee && $issue->fields->assignee->name == 'fabrizio.gambato') {
+                //    dd($issue->fields->assignee);
+                //}
+
                 $version->issues[$issue->key] = [
                     'key'                                 => $issue->key,
                     'reporter'                            => $issue->fields->reporter ? [
@@ -163,7 +167,7 @@ class Versions
                     'description'                         => $issue->fields->description,
                     'priority'                            => $issue->fields->priority ? $issue->fields->priority->name : null,
                     'assignee'                            => $issue->fields->assignee ? [
-                        'name'         => $issue->fields->assignee->name,
+                        'username'         => $issue->fields->assignee->key,
                         'display_name' => $issue->fields->assignee->displayName,
                         'avatar_url'   => $issue->fields->assignee->avatarUrls['48x48'],
                     ] : null,

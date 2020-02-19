@@ -167,7 +167,7 @@ class Versions
                     'description'                         => $issue->fields->description,
                     'priority'                            => $issue->fields->priority ? $issue->fields->priority->name : null,
                     'assignee'                            => $issue->fields->assignee ? [
-                        'username'         => $issue->fields->assignee->key,
+                        'username'         => $issue->fields->assignee->name,
                         'display_name' => $issue->fields->assignee->displayName,
                         'avatar_url'   => $issue->fields->assignee->avatarUrls['48x48'],
                     ] : null,

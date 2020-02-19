@@ -1,32 +1,36 @@
 {
-    "name": "patriziotomato/laravel-jira",
-    "description": "Easily access the Jira-API in your Laravel Application",
-    "keywords": ["framework", "laravel"],
-    "license": "MIT",
-    "type": "project",
-    "require": {
-        "php": ">=7.2",
-        "laravel/framework": "^6.0",
-        "lesstif/php-jira-rest-client": "^1.44"
-    },
-    "autoload": {
-        "psr-4": {
-            "LaravelJira\\": "src/"
-        }
-    },
-    "autoload-dev": {
-        "psr-4": {
-            "Tests\\": "tests/"
-        }
-    },
-    "extra": {
-        "laravel": {
-            "providers": [
-                "LaravelJira\\JiraServiceProvider"
-            ],
-            "aliases": {
-                "Jira": "LaravelJira\\JiraFacade"
-            }
-        }
+  "name": "patriziotomato/laravel-jira",
+  "description": "Easily access the Jira-API in your Laravel Application",
+  "keywords": [
+    "framework",
+    "laravel"
+  ],
+  "license": "MIT",
+  "type": "project",
+  "require": {
+    "php": ">=7.2",
+    "laravel/framework": "^6.0",
+    "lesstif/php-jira-rest-client": "^1.44",
+    "khill/php-duration": "^1.0"
+  },
+  "autoload": {
+    "psr-4": {
+      "LaravelJira\\": "src/"
     }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Tests\\": "tests/"
+    }
+  },
+  "extra": {
+    "laravel": {
+      "providers": [
+        "LaravelJira\\JiraServiceProvider"
+      ],
+      "aliases": {
+        "Jira": "LaravelJira\\JiraFacade"
+      }
+    }
+  }
 }

@@ -2,7 +2,6 @@
 
 namespace LaravelJira\Responses;
 
-
 use Carbon\Carbon;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Log;
@@ -156,39 +155,39 @@ class Versions
                 //}
 
                 $version->issues[$issue->key] = [
-                    'key'                                 => $issue->key,
-                    'reporter'                            => $issue->fields->reporter ? [
-                        'name'         => $issue->fields->reporter->name,
+                    'key' => $issue->key,
+                    'reporter' => $issue->fields->reporter ? [
+                        'name' => $issue->fields->reporter->name,
                         'display_name' => $issue->fields->reporter->displayName,
-                        'avatar_url'   => $issue->fields->reporter->avatarUrls['48x48'],
+                        'avatar_url' => $issue->fields->reporter->avatarUrls['48x48'],
                     ] : null,
-                    'created'                             => $issue->fields->created ? Carbon::instance($issue->fields->created) : null,
-                    'updated'                             => $issue->fields->updated ? Carbon::instance($issue->fields->updated) : null,
-                    'description'                         => $issue->fields->description,
-                    'priority'                            => $issue->fields->priority ? $issue->fields->priority->name : null,
-                    'assignee'                            => $issue->fields->assignee ? [
-                        'username'         => $issue->fields->assignee->key,
+                    'created' => $issue->fields->created ? Carbon::instance($issue->fields->created) : null,
+                    'updated' => $issue->fields->updated ? Carbon::instance($issue->fields->updated) : null,
+                    'description' => $issue->fields->description,
+                    'priority' => $issue->fields->priority ? $issue->fields->priority->name : null,
+                    'assignee' => $issue->fields->assignee ? [
+                        'username' => $issue->fields->assignee->name,
                         'display_name' => $issue->fields->assignee->displayName,
-                        'avatar_url'   => $issue->fields->assignee->avatarUrls['48x48'],
+                        'avatar_url' => $issue->fields->assignee->avatarUrls['48x48'],
                     ] : null,
-                    'duedate'                             => $issue->fields->duedate ? new Carbon($issue->fields->duedate) : null,
-                    'resolutiondate'                      => $issue->fields->resolutiondate ? new Carbon($issue->fields->resolutiondate) : null,
-                    'effort_estimated'                    => (int)$issue->fields->aggregatetimeoriginalestimate,
-                    'effort_estimated_remaining'          => (int)$issue->fields->timeestimate,
-                    'effort_spent'                        => (int)$issue->fields->aggregatetimespent,
-                    'effort_estimated_readable'           => (new Duration((int)$issue->fields->aggregatetimeoriginalestimate,
+                    'duedate' => $issue->fields->duedate ? new Carbon($issue->fields->duedate) : null,
+                    'resolutiondate' => $issue->fields->resolutiondate ? new Carbon($issue->fields->resolutiondate) : null,
+                    'effort_estimated' => (int) $issue->fields->aggregatetimeoriginalestimate,
+                    'effort_estimated_remaining' => (int) $issue->fields->timeestimate,
+                    'effort_spent' => (int) $issue->fields->aggregatetimespent,
+                    'effort_estimated_readable' => (new Duration((int) $issue->fields->aggregatetimeoriginalestimate,
                         8))->humanize(),
-                    'effort_estimated_remaining_readable' => (new Duration((int)$issue->fields->timeestimate,
+                    'effort_estimated_remaining_readable' => (new Duration((int) $issue->fields->timeestimate,
                         8))->humanize(),
-                    'effort_spent_readable'               => (new Duration((int)$issue->fields->aggregatetimespent,
+                    'effort_spent_readable' => (new Duration((int) $issue->fields->aggregatetimespent,
                         8))->humanize(),
-                    'lastViewed'                          => $issue->fields->lastViewed ? new Carbon($issue->fields->lastViewed->scalar) : null,
+                    'lastViewed' => $issue->fields->lastViewed ? new Carbon($issue->fields->lastViewed->scalar) : null,
                 ];
             }
 
-            $version->estimatedEffortInHoursReadable = (new Duration((int)$version->estimatedEffortInHours * 60 * 60,
+            $version->estimatedEffortInHoursReadable = (new Duration((int) $version->estimatedEffortInHours * 60 * 60,
                 8))->humanize();
-            $version->remainingEffortInHoursReadable = (new Duration((int)$version->remainingEffortInHours * 60 * 60,
+            $version->remainingEffortInHoursReadable = (new Duration((int) $version->remainingEffortInHours * 60 * 60,
                 8))->humanize();
 
             return $version;

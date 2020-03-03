@@ -157,18 +157,20 @@ class Versions
                 $version->issues[$issue->key] = [
                     'key' => $issue->key,
                     'reporter' => $issue->fields->reporter ? [
-                        'name' => $issue->fields->reporter->name,
+                        'id' => $issue->fields->reporter->accountId,
                         'display_name' => $issue->fields->reporter->displayName,
                         'avatar_url' => $issue->fields->reporter->avatarUrls['48x48'],
+                        'is_active' => $issue->fields->reporter->active,
                     ] : null,
                     'created' => $issue->fields->created ? Carbon::instance($issue->fields->created) : null,
                     'updated' => $issue->fields->updated ? Carbon::instance($issue->fields->updated) : null,
                     'description' => $issue->fields->description,
                     'priority' => $issue->fields->priority ? $issue->fields->priority->name : null,
                     'assignee' => $issue->fields->assignee ? [
-                        'username' => $issue->fields->assignee->name,
+                        'id' => $issue->fields->assignee->accountId,
                         'display_name' => $issue->fields->assignee->displayName,
                         'avatar_url' => $issue->fields->assignee->avatarUrls['48x48'],
+                        'is_active' => $issue->fields->assignee->active,
                     ] : null,
                     'duedate' => $issue->fields->duedate ? new Carbon($issue->fields->duedate) : null,
                     'resolutiondate' => $issue->fields->resolutiondate ? new Carbon($issue->fields->resolutiondate) : null,

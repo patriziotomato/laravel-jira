@@ -9,8 +9,8 @@
   "type": "project",
   "require": {
     "php": ">=7.2.5",
-    "laravel/framework": "^6.0|^7.0",
-    "lesstif/php-jira-rest-client": "^2.0",
+    "laravel/framework": "^6.0|^7.0|^8.0",
+    "lesstif/php-jira-rest-client": "^2.5",
     "khill/php-duration": "^1.0"
   },
   "autoload": {

@@ -2,7 +2,7 @@
 
 namespace LaravelJira\Services;
 
-use JiraRestApi\Project\ProjectService;
+use JiraCloud\Project\ProjectService;
 use LaravelJira\Responses\Versions;
 
 trait Project
@@ -12,7 +12,7 @@ trait Project
      *
      * @return Versions
      */
-    public function projectVersions($projectName)
+    public function projectVersions($projectName): Versions
     {
         $proj = new ProjectService();
 

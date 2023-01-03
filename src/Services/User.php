@@ -2,23 +2,24 @@
 
 namespace LaravelJira\Services;
 
-use JiraRestApi\Project\ProjectService;
-use JiraRestApi\User\UserService;
+use JiraCloud\User\UserService;
 use LaravelJira\Responses\Users;
-use LaravelJira\Responses\Versions;
 
 trait User
 {
     /**
      * @return Users
      */
-    public function users()
+    public function users(): Users
     {
         $userService = new UserService();
 
-        return new Users($userService->getUsers([
+        return new Users(users: $userService->findUsers([
+            'accountId' => '.', // get all users.
             'startAt' => 0,
             'maxResults' => 1000,
+            'includeInactive' => false,
+            //'property' => '*',
         ]));
     }
 }

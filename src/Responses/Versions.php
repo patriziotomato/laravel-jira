@@ -2,11 +2,12 @@
 
 namespace LaravelJira\Responses;
 
+use ArrayObject;
 use Carbon\Carbon;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Log;
-use JiraRestApi\Issue\IssueService;
-use JiraRestApi\Issue\Version;
+use JiraCloud\Issue\IssueService;
+use JiraCloud\Issue\Version;
 use Khill\Duration\Duration;
 use Symfony\Component\Console\Output\OutputInterface;
 
@@ -21,23 +22,21 @@ use Symfony\Component\Console\Output\OutputInterface;
  */
 class Versions
 {
-    public $versions;
-
     /** @var Collection */
-    private $filteredVersions;
+    private Collection $filteredVersions;
 
-    public function __construct($versions)
-    {
-        $this->versions = $versions;
+    public function __construct(
+        public ArrayObject $versions
+    ) {
         $this->filteredVersions = collect($versions);
     }
 
-    public function get()
+    public function get(): Collection
     {
         return $this->filteredVersions;
     }
 
-    public function orderByReleaseDate()
+    public function orderByReleaseDate(): static
     {
         $this->filteredVersions = $this->filteredVersions->sort(function (Version $versionA, Version $versionB) {
             if (!$versionA->releaseDate) {
@@ -57,11 +56,38 @@ class Versions
         return $this;
     }
 
-    public function released()
+    public function released(): static
     {
         $this->filterVersions(true, null, null);
 
         return $this;
+    }
+
+    private function filterVersions($released, $archived, $overdue): void
+    {
+        $this->filteredVersions = $this->filteredVersions->reject(function (Version $version) use (
+            $released,
+            $archived,
+            $overdue
+        ) {
+            if (!is_null($released) && $version->released != $released) {
+                return true;
+            }
+
+            if (!is_null($archived) && $version->archived != $archived) {
+                return true;
+            }
+
+            if (!is_null($overdue) && $version->overdue != $overdue) {
+                return true;
+            }
+
+//            if (!$version->releaseDate) {
+//                return true;
+//            }
+//
+//            return Carbon::now()->gt(Carbon::instance($version->releaseDate));
+        });
     }
 
     public function unreleased()
@@ -99,11 +125,11 @@ class Versions
         return $this;
     }
 
-    public function withTicketInformation(int $verbosityLevel = OutputInterface::VERBOSITY_NORMAL)
+    public function withTicketInformation(int $verbosityLevel = OutputInterface::VERBOSITY_NORMAL): static
     {
-        $issueService = new IssueService();
+        $this->filteredVersions->transform(function ($version) use ($verbosityLevel) {
+            $issueService = new IssueService();
 
-        $this->filteredVersions->transform(function ($version) use ($issueService, $verbosityLevel) {
             if ($verbosityLevel >= OutputInterface::VERBOSITY_VERY_VERBOSE) {
                 if ($version->archived) {
                     Log::debug("- Skipping ticket informations for milestone {$version->name} #$version->id");
@@ -164,7 +190,7 @@ class Versions
                     ] : null,
                     'created' => $issue->fields->created ? Carbon::instance($issue->fields->created) : null,
                     'updated' => $issue->fields->updated ? Carbon::instance($issue->fields->updated) : null,
-                    'description' => $issue->fields->description,
+                    'description' => $issue->fields->description ?? null,
                     'priority' => $issue->fields->priority ? $issue->fields->priority->name : null,
                     'assignee' => $issue->fields->assignee ? [
                         'id' => $issue->fields->assignee->accountId,
@@ -196,32 +222,5 @@ class Versions
         });
 
         return $this;
-    }
-
-    private function filterVersions($released, $archived, $overdue)
-    {
-        $this->filteredVersions = $this->filteredVersions->reject(function (Version $version) use (
-            $released,
-            $archived,
-            $overdue
-        ) {
-            if (!is_null($released) && $version->released != $released) {
-                return true;
-            }
-
-            if (!is_null($archived) && $version->archived != $archived) {
-                return true;
-            }
-
-            if (!is_null($overdue) && $version->overdue != $overdue) {
-                return true;
-            }
-
-//            if (!$version->releaseDate) {
-//                return true;
-//            }
-//
-//            return Carbon::now()->gt(Carbon::instance($version->releaseDate));
-        });
     }
 }

@@ -28,9 +28,6 @@
       "providers": [
         "LaravelJira\\JiraServiceProvider"
       ],
-      "aliases": {
-        "Jira": "LaravelJira\\JiraFacade"
-      }
     }
   }
 }

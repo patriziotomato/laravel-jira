@@ -1,7 +1,7 @@
 # laravel-jira
 Easily access the Jira-API in your Laravel Application
 
-## Configuration
+## Configuration via .env
 
 ```
 JIRAAPI_V3_HOST="https://xxxxxxx.atlassian.net"

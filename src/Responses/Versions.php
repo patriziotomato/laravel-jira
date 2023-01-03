@@ -63,7 +63,7 @@ class Versions
         return $this;
     }
 
-    private function filterVersions($released, $archived, $overdue): void
+    private function filterVersions($released, $archived, $overdue): static
     {
         $this->filteredVersions = $this->filteredVersions->reject(function (Version $version) use (
             $released,
@@ -87,38 +87,41 @@ class Versions
 //            }
 //
 //            return Carbon::now()->gt(Carbon::instance($version->releaseDate));
+            return false;
         });
+
+        return $this;
     }
 
-    public function unreleased()
+    public function unreleased(): static
     {
         $this->filterVersions(false, null, null);
 
         return $this;
     }
 
-    public function archived()
+    public function archived(): static
     {
         $this->filterVersions(null, true, null);
 
         return $this;
     }
 
-    public function unarchived()
+    public function unarchived(): static
     {
         $this->filterVersions(null, false, null);
 
         return $this;
     }
 
-    public function overdue()
+    public function overdue(): static
     {
         $this->filterVersions(null, true, true);
 
         return $this;
     }
 
-    public function notOverdue()
+    public function notOverdue(): static
     {
         $this->filterVersions(null, false, false);
 
@@ -132,12 +135,12 @@ class Versions
 
             if ($verbosityLevel >= OutputInterface::VERBOSITY_VERY_VERBOSE) {
                 if ($version->archived) {
-                    Log::debug("- Skipping ticket informations for milestone {$version->name} #$version->id");
+                    Log::debug("- Skipping ticket informations for milestone $version->name #$version->id");
 
                     return $version;
                 }
 
-                Log::debug("- Updating milestone {$version->name} #$version->id");
+                Log::debug("- Updating milestone $version->name #$version->id");
             }
 
             $searchResult = $issueService->search('fixVersion = '.$version->id, 0, 500);
@@ -191,7 +194,7 @@ class Versions
                     'created' => $issue->fields->created ? Carbon::instance($issue->fields->created) : null,
                     'updated' => $issue->fields->updated ? Carbon::instance($issue->fields->updated) : null,
                     'description' => $issue->fields->description ?? null,
-                    'priority' => $issue->fields->priority ? $issue->fields->priority->name : null,
+                    'priority' => $issue->fields->priority?->name,
                     'assignee' => $issue->fields->assignee ? [
                         'id' => $issue->fields->assignee->accountId,
                         'display_name' => $issue->fields->assignee->displayName,

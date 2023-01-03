@@ -8,10 +8,10 @@
   "license": "MIT",
   "type": "project",
   "require": {
-    "php": ">=7.2.5",
-    "laravel/framework": "^6.0|^7.0|^8.0",
-    "lesstif/php-jira-rest-client": "^2.5",
-    "khill/php-duration": "^1.0"
+    "php": "^8.2",
+    "laravel/framework": "^9.0",
+    "lesstif/jira-cloud-restapi": "^1.4",
+    "khill/php-duration": "^1.1"
   },
   "autoload": {
     "psr-4": {
@@ -27,10 +27,7 @@
     "laravel": {
       "providers": [
         "LaravelJira\\JiraServiceProvider"
-      ],
-      "aliases": {
-        "Jira": "LaravelJira\\JiraFacade"
-      }
+      ]
     }
   }
 }

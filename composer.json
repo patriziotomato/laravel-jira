@@ -10,6 +10,7 @@
   "require": {
     "php": "^8.2",
     "laravel/framework": "^9.0",
+    "lesstif/php-JiraCloud-RESTAPI": "^1.3",
     "khill/php-duration": "^1.1"
   },
   "autoload": {

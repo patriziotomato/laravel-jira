@@ -21,15 +21,15 @@ class JiraServiceProvider extends ServiceProvider
                 throw new RuntimeException('No Jira host specified');
             }
 
-//            if (!$configuration['user']) {
-//                throw new RuntimeException('No Jira user specified');
-//            }
+            if (!$configuration['user']) {
+                throw new RuntimeException('No Jira user specified');
+            }
 
             if (!$configuration['accesstoken']) {
                 throw new RuntimeException('No Jira Access token specified');
             }
 
-            return new Jira($configuration['host'], $configuration['accesstoken']);
+            return new Jira($configuration['host'], $configuration['user'], $configuration['accesstoken']);
         });
     }
 

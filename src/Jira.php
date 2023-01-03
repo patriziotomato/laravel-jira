@@ -10,7 +10,7 @@ class Jira
 
     public function __construct(
         public string $url,
-//        public string $user,
+        public string $user,
         public string $accessToken
     ) {
     }
